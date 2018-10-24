@@ -210,7 +210,7 @@
 
 
                             }
-
+                            
                         }
                     }
                     else
@@ -234,7 +234,13 @@
                             tempData.push(tempRow);                        
                         }
                     }
-                    
+                    if(self.tables[tableIndex].foreignTableRltn == true)
+                    {
+                        if(self.tables[tableIndex].columns.indexOf(self.tables[tableIndex].foreignTableColumn) == -1){
+                            self.tables[tableIndex].columns.push(self.tables[tableIndex].foreignTableColumn)
+                        }
+                        
+                    }
 //                    console.log(tempData)
                     self.tables[tableIndex].results = tempData;
                     self.tempResult = tempData;
@@ -307,6 +313,7 @@
                     else
                     {
                         this.tables[index].singleValueRltn = true
+                         this.tables[index].multiValueRltn = false
                     }
                 },
                 multiValueRltn(index)
@@ -319,6 +326,7 @@
                     else
                     {
                         this.tables[index].multiValueRltn = true
+                        this.tables[index].singleValueRltn = false
                     }
                 },
                 show(tableIndex){
