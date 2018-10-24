@@ -1,9 +1,7 @@
 <template>
     <div>
         <Header></Header>
-        <router-link class="btn btn primary" :to="{name:'OneToMany'}">Single Value</router-link>
-         <router-link class="btn btn primary"  :to="{name:'ManyToOne'}">Multi value</router-link>
-        <router-view  :key="$route.fullPath" ></router-view>
+        <TableForm></TableForm>
         
         
     </div>
@@ -11,8 +9,8 @@
 
 <script>
 import Header from '../BasicComponent/Header.vue';
-import OneToMany from '../BasicComponent/OneToMany.vue';
-import ManyToMany from '../BasicComponent/ManyToMany.vue';
+import TableForm from '../BasicComponent/TableForm.vue';
+
 
 export default{
         name:'Home',
@@ -23,8 +21,7 @@ export default{
         },
         components:{
             Header,
-            OneToMany,
-            ManyToMany
+            TableForm
            
         },
         methods:{

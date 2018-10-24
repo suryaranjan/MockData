@@ -4,9 +4,10 @@
                     <div>
                         <label class="col-1.5">Table Name:</label>                        
                         <input v-model="table.tableName" type="text" col-2>
-                         <button class="btn btn-default col-2 addTable" @click="addTable()" >Add Table</button>
+                         <button class="btn btn-primary col-2 addTable" @click="addTable()" >Add Table</button>
                          <button class="btn btn-default " v-if="table.foreignTableRltn == true" @click="deleteTable(tableIndex)" >X</button>
                     </div>
+            
                     <div v-if="table.foreignTableRltn == true" class="foreign-content">
                         
                         <label class="col-1.5">Foreign tables:</label>
@@ -19,12 +20,15 @@
                         
                         <label >Column:</label>
                         <label >{{table.foreignTableColumn}}</label>
-                       
-                        <label class="col-1.5">value to Relate :</label>
-                        <select class="col-2"  v-model="table.foreignTableValue">
+                        
+                        <button class="btn btn-primary" @click="singleValueRltn(tableIndex)">Single Value</button>
+                        <button class="btn btn-primary" @click="multiValueRltn(tableIndex)">Multi Value</button><br>
+                        
+                        <label v-if="table.singleValueRltn" class="col-1.5">value to Relate :</label>
+                        <select v-if="table.singleValueRltn" class="col-2"  v-model="table.foreignTableSingleValue">
                         
                             <option disabled value="">Please select category</option>
-                            <option v-for="(column, index2) in foreignColumns"  v-bind:value="column">{{column}}</option>
+                            <option v-for="(column, index2) in table.foreignTableMultiValues"  v-bind:value="column">{{column}}</option>
                         
                         </select>
                         
@@ -34,7 +38,7 @@
                         <label  class="col-2">Category</label>
                         <label  class="col-2">Type</label>
                         <label  class="col-2">Field Name</label>                      
-                        <button class="btn btn-default col-2" @click="addField(tableIndex)" id="addField">Add Field</button>
+                        <button class="btn btn-primary col-2" @click="addField(tableIndex)" id="addField">Add Field</button>
                         
                     </div>
                     
@@ -65,7 +69,7 @@
                     <label for="row">Rows : </label>
                     <input v-model.number='table.rows' type="number" id="row"  class="col-1">
                     
-                    <label >primary Key: </label>
+                    <label >Primary Key: </label>
                     
                      <select class="col-2" v-model="table.primaryKey">
                        
@@ -84,7 +88,7 @@
 <script>
     import Result from './Result.vue'
     export default{
-            name:'OneToOne',
+            name:'TableForm',
             data(){
                 return{
                     tables:[{
@@ -92,7 +96,10 @@
                             foreignTableRltn:false,
                             foreignTable:'',
                             foreignTableColumn:'',
-                            foreignTableValue:'',
+                            foreignTableSingleValue:'',
+                            foreignTableMultiValues:'',
+                            singleValueRltn:false,
+                            multiValueRltn:false,
                             primaryKey:'',
                             inputs:[{
                                 category:'',
@@ -140,7 +147,10 @@
                             foreignTableRltn:true,
                             foreignTable:'',
                             foreignTableColumn:'',
-                            foreignTableValue:'',
+                            foreignTableSingleValue:'',
+                            foreignTableMultiValues:'',
+                            singleValueRltn:false,
+                            multiValueRltn:false,
                             primaryKey:'',
                             inputs:[{
                                 category:'',
@@ -170,25 +180,58 @@
                     var self = this;
                     var tempData = new Array();
                     
-                    
-                    for(var i=0; i < self.tables[tableIndex].rows ;i++)
+                    if(self.tables[tableIndex].multiValueRltn == true)
                     {
-                        var tempRow = new Object();
-                        self.tables[tableIndex].inputs.forEach(generate);
-                            function generate(value){
-//                                console.log(value.one)
-//                                console.log(value.two)
-//                                console.log(value.three)                                         
-                                 var y = new self.$faker()[value.category][value.type]
-                                    
-                                  tempRow[value.fieldName] = y()
-                              }
-                              if(self.tables[tableIndex].foreignTableValue != "")
-                                    {
-                                        tempRow[self.tables[tableIndex].foreignTableColumn] = self.tables[tableIndex].foreignTableValue
-                                    }
-                        tempData.push(tempRow);                        
+                        if(self.tables[tableIndex].foreignTableMultiValues.length != 0)
+                        {
+                            console.log("foreign")
+                            for(var j=0; j< self.tables[tableIndex].foreignTableMultiValues.length; j++)
+                            {
+                                for(var i=0; i < self.tables[tableIndex].rows ; i++)
+                                {
+                                    console.log(self.tables[tableIndex].rows)
+                                    var tempRow = new Object();
+                                    self.tables[tableIndex].inputs.forEach(generate);
+                                        function generate(value){
+            //                                console.log(value.one)
+            //                                console.log(value.two)
+            //                                console.log(value.three)                                         
+                                             var y = new self.$faker()[value.category][value.type]
+
+                                              tempRow[value.fieldName] = y()
+                                          }
+
+                                    tempRow[self.tables[tableIndex].foreignTableColumn] = self.tables[tableIndex].foreignTableMultiValues[j]
+                                     tempData.push(tempRow);                 
+                                }
+
+
+                            }
+
+                        }
                     }
+                    else
+                    {
+                        for(var i=0; i < self.tables[tableIndex].rows ;i++)
+                        {
+                            var tempRow = new Object();
+                            self.tables[tableIndex].inputs.forEach(generate);
+                                function generate(value){
+    //                                console.log(value.one)
+    //                                console.log(value.two)
+    //                                console.log(value.three)                                         
+                                     var y = new self.$faker()[value.category][value.type]
+
+                                      tempRow[value.fieldName] = y()
+                                  }
+                                  if(self.tables[tableIndex].foreignTableSingleValue != "")
+                                        {
+                                            tempRow[self.tables[tableIndex].foreignTableColumn] = self.tables[tableIndex].foreignTableSingleValue
+                                        }
+                            tempData.push(tempRow);                        
+                        }
+                    }
+                    
 //                    console.log(tempData)
                     self.tables[tableIndex].results = tempData;
                     self.tempResult = tempData;
@@ -237,7 +280,7 @@
 
                            column = value.primaryKey;                          
                            self.tables[tableIndex].foreignTableColumn = value.primaryKey;
-                           self.foreignColumns = value.results.map(findColumnValue);
+                           self.tables[tableIndex].foreignTableMultiValues = value.results.map(findColumnValue);
                            
                             function findColumnValue(value1){
                                 console.log(value1[column])
@@ -249,6 +292,30 @@
                    
                    
                   
+                },
+                singleValueRltn(index)
+                {
+                    var self = this;
+                    if( this.tables[index].singleValueRltn == true)
+                    {
+                        this.tables[index].singleValueRltn = false
+                    }
+                    else
+                    {
+                        this.tables[index].singleValueRltn = true
+                    }
+                },
+                multiValueRltn(index)
+                {
+                    var self = this;
+                    if( this.tables[index].multiValueRltn == true)
+                    {
+                        this.tables[index].multiValueRltn = false
+                    }
+                    else
+                    {
+                        this.tables[index].multiValueRltn = true
+                    }
                 }
                 
             },
@@ -272,5 +339,12 @@
     .foreign-content{
         margin-top:10px;
         margin-bottom: 10px;
+    }
+    label{
+        font-weight: bold;
+      
+    }
+    input, button,select{
+        border-radius: 5px;
     }
 </style>
