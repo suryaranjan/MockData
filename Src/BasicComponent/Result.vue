@@ -6,8 +6,8 @@
         <div  class="modal" id="myModal">
 
             
-                    <div class="modal-header">
-                        <h4 class="modal-title">Mockdata</h4>
+                    <div class="modal-header" text-align="center" style="background-color: white;">
+                        <h4 class="modal-title" >Mockdata</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
@@ -16,7 +16,7 @@
                             <colgroup>
                                <col v-for="column in columns" style="width: colWidth%" />
                             </colgroup>
-                            <tr>
+                            <tr text-align="center">
                                 <th colspan="columns.length+1">{{table.tableName}}</th>
                             </tr>
                             <tr >
@@ -79,5 +79,8 @@
     div{
         
         margin:auto;
+    }
+    h4{
+        margin: auto;
     }
 </style>

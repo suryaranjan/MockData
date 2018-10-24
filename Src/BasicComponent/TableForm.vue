@@ -4,7 +4,7 @@
                     <div>
                         <label class="col-1.5">Table Name:</label>                        
                         <input v-model="table.tableName" type="text" col-2>
-                         <button class="btn btn-primary col-2 addTable" @click="addTable()" >Add Table</button>
+                         <button class="btn btn-primary  addTable" @click="addTable()" >Add Table</button>
                          <button class="btn btn-default " v-if="table.foreignTableRltn == true" @click="deleteTable(tableIndex)" >X</button>
                     </div>
             
@@ -38,7 +38,7 @@
                         <label  class="col-2">Category</label>
                         <label  class="col-2">Type</label>
                         <label  class="col-2">Field Name</label>                      
-                        <button class="btn btn-primary col-2" @click="addField(tableIndex)" id="addField">Add Field</button>
+                        <button class="btn btn-primary " @click="addField(tableIndex)" id="addField">Add Field</button>
                         
                     </div>
                     
@@ -79,9 +79,10 @@
                      </select> 
                     
                     <button  class="btn btn-primary" @click="generateData(tableIndex) " data-toggle="modal" data-target="#myModal" id="generate" >Generate</button> 
-                    <button  class="btn btn-primary"  data-toggle="modal" data-target="#myModal"  >Show</button>
-                    <Result v-bind:table="table"  v-bind:columns="table.columns" v-bind:colWidth="colWidth " ></Result>
+                    <button  class="btn btn-primary"  data-toggle="modal" data-target="#myModal" @click="show(tableIndex)"  >Show</button>
+                    
         </div>
+        <Result v-bind:table="resultTable"  v-bind:columns="resultTable.columns" v-bind:colWidth="resultTable.colWidth " ></Result>
     </div>
 </template>
 
@@ -109,21 +110,22 @@
                             columns:[],
                             results:[],
                             rows:0,
+                            colWidth:'',
                     }],
                     
                     categories:[],
                     types:[],
                  
-                    resultTable:[],
+                    resultTable:{},
                     tempResult:'',
                     foreignColumns:[],
-                    colWidth:''
+                    
                 }
             },
             created(){
                 
-                var result = Object.keys(this.$faker());
-                this.categories = result;
+                
+                this.categories = ['name','address','phone','internet','company','image','lorem','helpers','date','random','hacker'];
 //                console.log(this.categories)
                 
             },
@@ -160,7 +162,8 @@
                             }],
                             columns:[],
                             results:[],
-                            rows:''
+                            rows:'',
+                            colWidth:''
                     })
                       
                 },
@@ -238,8 +241,9 @@
                     console.log("table data")
                    // console.log(self.tables[tableIndex])
                    console.log(self.tables[tableIndex].results)                  
-                   self.colWidth = (100/self.tables[tableIndex].columns.length)
+                   self.tables[tableIndex].colWidth = (100/self.tables[tableIndex].columns.length)
                     //console.log(self.colWidth)
+                    self.show(tableIndex)
                    document.getElementById('generate').blur(); 
                 },
                 
@@ -316,6 +320,10 @@
                     {
                         this.tables[index].multiValueRltn = true
                     }
+                },
+                show(tableIndex){
+                    var self = this
+                    self.resultTable = self.tables[tableIndex]
                 }
                 
             },
