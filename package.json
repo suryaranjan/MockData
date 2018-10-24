@@ -1,0 +1,42 @@
+{
+  "name": "mockdata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./Src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack",
+    "build-min": "webpack ./Src/index.js ./Dist/app.js -p",
+    "watch": "webpack ./Src/index.js ./Dist/app.js --watch"
+  },
+  "author": "me",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.3",
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.11",
+    "node-sass": "^4.9.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.0",
+    "url-loader": "^1.1.1",
+    "vue": "^2.5.17",
+    "vue-debounce": "^0.2.0",
+    "vue-faker": "^1.0.1",
+    "vue-loader": "^15.4.2",
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.5.17",
+    "vue-youtube-embed": "^2.2.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "hmr-loader": "^1.0.5",
+    "webpack": "^4.22.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}
